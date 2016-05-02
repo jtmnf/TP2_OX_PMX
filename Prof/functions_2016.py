@@ -42,4 +42,4 @@ if __name__ == '__main__':
 	boa, best_average = run(5, 250, 100, domain, 0.01, sigma, 0.9, tour_sel(3), cross(0.3), muta_float_gaussian,
 							sel_survivors_elite(0.1), merito)
 	
-    display_stat_n(boa, best_average)
+    #display_stat_n(boa, best_average)

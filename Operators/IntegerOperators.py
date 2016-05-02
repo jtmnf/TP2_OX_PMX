@@ -1,4 +1,4 @@
-import random as rand
+import random
 import numpy as np
 from Problem.Algorithm import *
 
@@ -7,7 +7,7 @@ class IntegerOperators:
     @staticmethod
     # Variation operators: swap mutation
     def mut_swap(cromo, prob_muta):
-        if random() < prob_muta:
+        if random.random() < prob_muta:
             comp = len(cromo) - 1
             copia = cromo[:]
             i = randint(0, comp)
@@ -23,7 +23,7 @@ class IntegerOperators:
     @staticmethod
     # Variation operators: insert selection
     def mut_insert(cromo, prob_muta):
-        if random() < prob_muta:
+        if random.random() < prob_muta:
             comp = len(cromo) - 1
             copia = cromo[:]
             i = randint(0, comp)
@@ -46,7 +46,7 @@ class IntegerOperators:
     @staticmethod
     # Variation operators: scramble mutation
     def mut_scramble(cromo,prob_muta):
-        if random() < prob_muta:
+        if random.random() < prob_muta:
             comp = len(cromo)-1
             copia = cromo[:]
             i = randint(0,comp)
@@ -63,7 +63,7 @@ class IntegerOperators:
     @staticmethod
     # Variation Operators :  Cycle Cross
     def cross_cycle(cromo_1,cromo_2,prob_cross):
-        if random() < prob_cross:
+        if random.random() < prob_cross:
             size = len(cromo_1)
             f1 = [None]*size
             f2 = [None]*size
@@ -94,7 +94,7 @@ class IntegerOperators:
     @staticmethod
     # Variation Operators :  PMX
     def cross_pmx(cromo_1,cromo_2,prob_cross):
-        if random() < prob_cross:
+        if random.random() < prob_cross:
             size = len(cromo_1)
             pc = sample(range(size),2)
             pc.sort()
@@ -143,7 +143,7 @@ class IntegerOperators:
     # Variation Operators :  OX - order crossover
     def cross_order(cromo_1,cromo_2,prob_cross):
         size = len(cromo_1)
-        if random() < prob_cross:
+        if random.random() < prob_cross:
             pc= sample(range(size),2)
             pc.sort()
             pc1,pc2 = pc
@@ -181,7 +181,7 @@ class IntegerOperators:
     # Variation Operators :  Translocation
     def cross_translocation_wrapper(Problem):
         def cross_translocation(cromo_1,cromo_2,prob_cross):
-            if len(cromo_1)>2 and len(cromo_2)>2 and random() < prob_cross:
+            if len(cromo_1)>2 and len(cromo_2)>2 and random.random() < prob_cross:
                 pc1 = sample(range(len(cromo_1)),2)
                 pc1.sort()
                 pc11,pc12 = pc1
@@ -213,7 +213,7 @@ class IntegerOperators:
                     break
 
                 _action = rand.randint(min_val, 2)
-                if random() < prob_muta:
+                if random.random() < prob_muta:
                     if _action==0:
                         del _cromo[rand.randint(0, len(_cromo)-1)]
                     else:

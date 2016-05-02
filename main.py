@@ -1,65 +1,59 @@
 from Operators.IntegerOperators import *
 from Operators.LocalSearchOperators import *
-from Problem.problem import ProblemRepresentation
+from Problem.ProblemRepresentation import *
 
 if __name__ == '__main__':
-    Configs = []
+	Recombinations = [{'operator':IntegerOperators.cross_pmx,'display':'PMX'},{'operator':IntegerOperators.cross_order,'display':'OX'}]
 
-    for Config in Configs:
+	Problems = []
+	
+	'''
+	Problem = {}
+	Problem['name'] = 'jb'
+	Problem['config'] = {'name':Problem['name'],'dimension':50}
+	Problem['generate_pop'] = ProblemRepresentation.generateJBPopulation
+	Problem['fitness'] = ProblemRepresentation.standardFitnessJB
+	Problems.append(Problem)
+	'''
+	
+	Problem = {}
+	Problem['name'] = 'tsp'
+	TSPCoord = ProblemRepresentation.readTSPCoord('Data/TSP/wi29.tsp')
+	TSPDetails = ProblemRepresentation.parseTSPCoord(TSPCoord)
+	Problem['config'] = {'name':Problem['name'],'TSPDetails':TSPDetails,'cromo_size':len(TSPDetails),'optimization':Algorithm.Minimization}
+	Problem['generate_pop'] = ProblemRepresentation.generateTSPPopulation
+	Problem['fitness'] = ProblemRepresentation.standardFitnessTSP
+	Problems.append(Problem)
 
-        print('Cities: ' + str(Config['n_cities']) + ' Items: ' + str(Config['n_items']) + ' Instance: ' + str(Config['instance']) + ' Thighness: ' + str(Config['thighness']))
-        oProblem = ProblemRepresentation(Config['n_cities'], Config['n_items'], Config['instance'], Config['thighness'])
+	for Recombination in Recombinations:
+		for Problem in Problems:
 
-        pop_size = 20
-        numb_generations = 20
+			Config = Problem['config']
+			Config['numb_generations'] = 20
+			Config['pop_size'] = 20
+			Config['runs'] = 3
+			Config['tournament_size'] = int(Config['pop_size']/5)
+			Config['sel_parents'] = 'tournament'
+			Config['sel_survivors'] = 'elitism'
+			Config['elite_percent'] = 0.1
+			Config['generate_pop'] = Problem['generate_pop']
+			Config['fitness_func'] = Problem['fitness']
 
-        runs = 3
-        tournament_size = int(pop_size/5)
-    
-        sel_parents = 'tournament'
-        sel_survivors = 'elitism'
-        elite_percent = 0.1
-        fitness_func = Algorithm.standardFitnessWrapper(oProblem)
+			Config['prob_cross'] = 0.9
+			Config['prob_mut'] = 0.1
+			Config['recombination'] = Recombination['operator']
+			Config['mutation'] = IntegerOperators.mut_insert
 
-        Hypermutation = {}
-        Hypermutation['generations'] = int(numb_generations/20)
-        Hypermutation['max_generations'] = int(pop_size/10)
-        Hypermutation['activate'] = True
+			Plots = {}
+			Plots['pop_diversity'] = True
 
-        TSPConfig = {}
-        TSPConfig['prob_cross'] = [0.9, 0.55]
-        TSPConfig['prob_mut'] = [0.1, 0.55]
-        TSPConfig['prob_hmut'] = 0.6
-        TSPConfig['recombination'] = IntegerOperators.cross_pmx
-        TSPConfig['mutation'] = IntegerOperators.mut_insert
-        TSPConfig['prob_variation_cross'] = True
-        TSPConfig['prob_variation_mut'] = True
+			print('Problem: ' + str(Problem['name']))
+			oAlgorithm = Algorithm(Config, Plots)
+			oAlgorithm.run()
+		
+			_func = max if oAlgorithm._reverseOrder() else min
+			BestOfAll = "%.2f" % _func(oAlgorithm.StatBestByRun) 
+			print('## Best of All: ' + BestOfAll)
 
-        KPConfig = {}
-        KPConfig['prob_cross'] = [0.25, 0.3]
-        KPConfig['prob_mut'] = [0.05, 0.1]
-        KPConfig['prob_hmut'] = 0.25 # ou 0.2
-        KPConfig['prob_heur'] = 0.9
-        KPConfig['recombination'] = IntegerOperators.cross_translocation_wrapper(oProblem)
-        KPConfig['mutation'] = IntegerOperators.mut_ttp_kp_int_wrapper(oProblem)
-        KPConfig['local_search'] = LocalSearchOperators.kp_hillclimbing_wrapper(oProblem,fitness_func,Config['n_cities']*Config['n_items'] if Config['n_cities']*Config['n_items'] < 1000 else 1000)
-        KPConfig['prob_variation_cross'] = True
-        KPConfig['prob_variation_mut'] = True
-
-        plots = {}
-        plots['popDiversity'] = True
-
-        emigrants = {}
-        emigrants['sizePerct'] = 0.3
-        emigrants['active'] = True
-
-        oAlgorithm = Algorithm(oProblem, runs, numb_generations, tournament_size, sel_parents,
-                               sel_survivors, elite_percent, fitness_func, TSPConfig, KPConfig, Hypermutation, plots,
-                               pop_size, emigrants)
-        oAlgorithm.run()
-        
-        BestOfAll = "%.2f" % max(oAlgorithm.StatBestByRun) 
-        print('## Best of All: ' + BestOfAll)
-
-        #Visual.plotBestAverage(oAlgorithm.StatBestByRun,oAlgorithm.StatAvgBestByRun)
-        print('')
+			#Visual.plotBestAverage(oAlgorithm.StatBestByRun,oAlgorithm.StatAvgBestByRun)
+			print('')
