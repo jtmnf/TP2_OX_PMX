@@ -58,7 +58,7 @@ class ProblemRepresentation(object):
         # Sum the number of queens on each diagonal:
         for i in range(size):
             left_diagonal[i + Indiv[i]] += 1
-        right_diagonal[size - 1 - i + Indiv[i]] += 1
+            right_diagonal[size - 1 - i + Indiv[i]] += 1
 
         # Count the number of conflicts on each diagonal
         violations = 0
@@ -67,8 +67,8 @@ class ProblemRepresentation(object):
             if left_diagonal[i] > 1:
                 violations += left_diagonal[i] - 1
 
-        if right_diagonal[i] > 1:
-            violations += right_diagonal[i] - 1
+            if right_diagonal[i] > 1:
+                violations += right_diagonal[i] - 1
 
         return violations
 
