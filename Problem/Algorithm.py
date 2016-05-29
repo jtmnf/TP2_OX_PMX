@@ -102,6 +102,9 @@ class Algorithm:
         self.StatBest = [None] * self.runs
         self.StatAvg = [None] * self.runs
 
+        self.TimeRun = []
+        self.BestRun = []
+
         for _run in range(self.runs):
             self._initializePop()
             print('Starting Run: ' + str(_run + 1))
@@ -113,6 +116,8 @@ class Algorithm:
 
             Diversity = []
             MaxDiver = []
+
+            start_time = time.time()
             for i in range(self.numb_generations):
                 if (i + 1) % 20 == 0:
                     print('--Generation ' + str(i + 1))
@@ -145,11 +150,19 @@ class Algorithm:
                 self.StatBest[_run].append(self._getPopulationBest()[1])
                 self.StatAvg[_run].append(self._getPopulationAverage())
 
+
+            final_time = time.time()
+
             avg = sum(self.StatBest[_run]) / len(self.StatBest[_run])
             print(self._getPopulationBest()[0])
+            print('-- Time: ' + str(final_time - start_time))
             print('-- Average Best: ' + str(avg))
             _func = max if self._reverseOrder() else min
             print('---Best in run: ' + "%.2f" % _func(self.StatBest[_run]))
+
+            self.TimeRun.append(final_time - start_time)
+            self.BestRun.append(_func(self.StatBest[_run]))
+
             print('')
 
             if self.Plots['pop_diversity'] == True:
