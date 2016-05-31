@@ -7,10 +7,12 @@ import time
 from Display.Visual import *
 
 if __name__ == '__main__':
-    Recombinations = [{'name': 'PMX', 'operator': IntegerOperators.cross_pmx, 'display': 'PMX'},
-                      {'name': 'OX', 'operator': IntegerOperators.cross_order, 'display': 'OX'}]
+    '''Recombinations = [{'name': 'PMX', 'operator': IntegerOperators.cross_pmx, 'display': 'PMX'},
+                      {'name': 'OX', 'operator': IntegerOperators.cross_order, 'display': 'OX'}]'''
 
-    n_queens = [8, 12, 15, 25, 35, 60]
+    Recombinations = [{'name': 'PMX', 'operator': IntegerOperators.cross_pmx, 'display': 'PMX'}]
+
+    #n_queens = [8, 12, 15, 25, 35, 60]
     #'Data/TSP/usa50.tsp', 'Data/TSP/usa100.tsp', 'Data/TSP/usa200.tsp'
     tsp = ['Data/TSP/usa70.tsp', 'Data/TSP/usa130.tsp', 'Data/TSP/usa170.tsp']
 
@@ -25,6 +27,7 @@ if __name__ == '__main__':
 
     for j in range(len(tsp)):
         Problems = []
+
         Problem = {}
         Problem['name'] = 'tsp'
         TSPCoord = ProblemRepresentation.readTSPCoord(tsp[j])
@@ -34,6 +37,15 @@ if __name__ == '__main__':
         Problem['generate_pop'] = ProblemRepresentation.generateTSPPopulation
         Problem['fitness'] = ProblemRepresentation.standardFitnessTSP
         Problems.append(Problem)
+
+        '''
+        Problem = {}
+        Problem['name'] = 'n_queens'
+        Problem['config'] = {'name': Problem['name'], 'cromo_size': n_queens[j], 'optimization': Algorithm.Minimization}
+        Problem['generate_pop'] = ProblemRepresentation.generateTSPPopulation
+        Problem['fitness'] = ProblemRepresentation.standardFitnessNQueens
+        Problems.append(Problem)
+        '''
 
         for Recombination in Recombinations:
             for Problem in Problems:

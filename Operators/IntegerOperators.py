@@ -160,15 +160,16 @@ class IntegerOperators:
             while pos != pc1:
                 j = fixed % size
                 while cromo_2[j] in f1:
-                    j = (j+1) % size	
+                    j = (j+1) % size
+                fixed = j
                 f1[pos] = cromo_2[j]
-                pos = (pos + 1)% size		
-
+                pos = (pos + 1)% size
             pos = (pc2+1)% size
             while pos != pc1:
                 j = fixed % size
                 while cromo_1[j] in f2:
-                    j = (j+1) % size	
+                    j = (j+1) % size
+                fixed = j
                 f2[pos] = cromo_1[j]
                 pos = (pos + 1)% size	
             return f1,f2
